@@ -41,6 +41,7 @@ class _ZoomQttState extends State<ZoomQtt> {
   var enteredTopic;
 
   Future<Null> getSharedPrefs() async {
+    print('Loading data to the form........');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _brokerAddressController =
@@ -253,11 +254,12 @@ class _ZoomQttState extends State<ZoomQtt> {
   }
 
   saveDataToPrefs() async {
+    print('Saving data to form before Acting.......');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('prefBrokerAddress', enteredBrokerAddress);
     prefs.setString('prefUsername', enteredUsername);
     prefs.setString('prefPassword', enteredPassword);
-    prefs.setString('topic', enteredTopic);
+    prefs.setString('prefTopic', enteredTopic);
   }
 
   goOpenZoom() {
