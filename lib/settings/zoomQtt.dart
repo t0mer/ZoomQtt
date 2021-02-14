@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zoomqtt/settings/mqttService.dart';
 import 'dart:async';
-import 'package:zoomqtt/settings/notifyClass.dart';
 
 class ZoomQtt extends StatefulWidget {
   ZoomQtt({Key key, this.title}) : super(key: key);
