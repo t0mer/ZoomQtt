@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zoomqtt/settings/mqttService.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zoomqtt/settings/mqttService.dart';
 
 class ZoomQtt extends StatefulWidget {
-  ZoomQtt({Key key, this.title}) : super(key: key);
+  static const String id = 'zoomQtt';
+  ZoomQtt({this.title});
   final String title;
   @override
   _ZoomQttState createState() => _ZoomQttState();
@@ -271,7 +272,7 @@ class _ZoomQttState extends State<ZoomQtt> {
                   Text("Footer + link here"),
                   SizedBox(height: 40),
                   Text(
-                    '${mqttData.messageReciver} Tasks',
+                    '${mqttData.messageReciver != null ? mqttData.messageReciver : ""} Tasks',
                     style: TextStyle(color: Colors.black, fontSize: 18.0),
                   ),
                 ],

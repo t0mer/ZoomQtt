@@ -1,11 +1,15 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:convert';
 import 'dart:async';
 
+import 'package:url_launcher/url_launcher.dart';
+
 class MqttService extends ChangeNotifier {
-  String messageReciver = "";
+  String messageReciver;
+  bool isNew = false;
   Future<MqttServerClient> connect(String username, String password,
       String brokerUrl, String clientID, String topic) async {
     MqttServerClient client =
@@ -54,6 +58,8 @@ class MqttService extends ChangeNotifier {
       final body = json.decode(payload);
       print(body['msg']);
       messageReciver = body['msg'];
+      isNew = true;
+      openLink(messageReciver);
       notifyListeners();
     });
   }
@@ -91,5 +97,12 @@ class MqttService extends ChangeNotifier {
 // PING response received
   void pong() {
     print('Ping response client callback invoked');
+  }
+
+  void openLink(String url) {
+    if (isNew) {
+      launch(url, forceSafariVC: false);
+      isNew = !isNew;
+    }
   }
 }

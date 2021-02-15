@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zoomqtt/settings/mqttService.dart';
-import 'package:zoomqtt/settings/zoomQtt.dart';
+import 'package:zoomqtt/screens/zoomQtt.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,7 +20,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: ZoomQtt(title: 'ZoomQtt'),
+        routes: {
+          ZoomQtt.id: (context) => ZoomQtt(title: 'ZoomQtt'),
+        },
+        initialRoute: ZoomQtt.id,
       ),
     );
   }
