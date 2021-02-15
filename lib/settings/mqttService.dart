@@ -1,11 +1,11 @@
+import 'package:flutter/foundation.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 import 'dart:convert';
 import 'dart:async';
-import 'package:zoomqtt/settings/notifyClass.dart';
 
-class MqttService {
-  UpdateState updateState = UpdateState();
+class MqttService extends ChangeNotifier {
+  String messageReciver = "";
   Future<MqttServerClient> connect(String username, String password,
       String brokerUrl, String clientID, String topic) async {
     MqttServerClient client =
@@ -32,8 +32,6 @@ class MqttService {
       subscribe(client, topic);
       client.connectionStatus;
       clientListe(client);
-
-      getClient(client: client);
     } catch (e) {
       print('Exception: $e');
       client.disconnect();
@@ -55,7 +53,8 @@ class MqttService {
       print('Received message:$payload from topic: ${c[0].topic}>');
       final body = json.decode(payload);
       print(body['msg']);
-      updateState.updateState();
+      messageReciver = body['msg'];
+      notifyListeners();
     });
   }
 
@@ -67,10 +66,6 @@ class MqttService {
   // connection succeeded
   void onConnected() {
     print('Connected');
-  }
-
-  MqttServerClient getClient({MqttServerClient client}) {
-    return client;
   }
 
 // unconnected
