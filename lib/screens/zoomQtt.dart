@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zoomqtt/settings/mqttService.dart';
 
 class ZoomQtt extends StatefulWidget {
@@ -14,6 +15,8 @@ class ZoomQtt extends StatefulWidget {
 }
 
 class _ZoomQttState extends State<ZoomQtt> {
+  bool settingLock = true;
+  String url = "https://www.google.com";
   var brokerAddressController = TextEditingController();
   var usernameController = TextEditingController();
   var passwordController = TextEditingController();
@@ -32,13 +35,13 @@ class _ZoomQttState extends State<ZoomQtt> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       brokerAddressController =
-          new TextEditingController(text: prefs.getString("prefBrokerAddress"));
+          TextEditingController(text: prefs.getString("prefBrokerAddress"));
       usernameController =
-          new TextEditingController(text: prefs.getString("prefUsername"));
+          TextEditingController(text: prefs.getString("prefUsername"));
       passwordController =
-          new TextEditingController(text: prefs.getString("prefPassword"));
+          TextEditingController(text: prefs.getString("prefPassword"));
       topicController =
-          new TextEditingController(text: prefs.getString("prefTopic"));
+          TextEditingController(text: prefs.getString("prefTopic"));
     });
   }
 
@@ -61,24 +64,73 @@ class _ZoomQttState extends State<ZoomQtt> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  SizedBox(height: 40),
-                  Text("logo here"),
+                  SizedBox(height: 10),
+                  Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                        image: AssetImage("lib/assets/orengLogo.jpg"),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  OutlineButton(
+                      textColor: Colors.orange[300],
+                      shape: RoundedRectangleBorder(
+                          borderRadius: new BorderRadius.circular(30.0)),
+                      onPressed: () {
+                        launch(url, forceSafariVC: false);
+                      },
+                      child: Text('Go to the Guide')),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "UnLock Settings",
+                        style: TextStyle(
+                            color: settingLock ? null : Colors.green[900]),
+                      ),
+                      Switch(
+                        value: settingLock,
+                        onChanged: (value) {
+                          setState(() {
+                            settingLock = !settingLock;
+                          });
+                        },
+                        activeTrackColor: Colors.redAccent[100],
+                        activeColor: Colors.redAccent[100],
+                        inactiveTrackColor: Colors.green[900],
+                      ),
+                      Text(
+                        "Lock Settings",
+                        style: TextStyle(
+                            color: settingLock ? Colors.red[300] : null),
+                      ),
+                    ],
+                  ),
                   SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       SizedBox(width: 20),
                       Text('Address:'),
-                      SizedBox(width: 10),
+                      SizedBox(width: 40),
                       Expanded(
                         child: TextField(
+                          readOnly: settingLock,
                           style: TextStyle(color: Colors.black, fontSize: 20),
                           controller: brokerAddressController,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.all(4),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: settingLock
+                                  ? Colors.blueGrey[100]
+                                  : Colors.white,
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
@@ -94,25 +146,28 @@ class _ZoomQttState extends State<ZoomQtt> {
                           },
                         ),
                       ),
-                      SizedBox(width: 30),
+                      SizedBox(width: 60),
                     ],
                   ),
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(width: 50),
+                      SizedBox(width: 20),
                       Text('Username:'),
-                      SizedBox(width: 10),
+                      SizedBox(width: 30),
                       Expanded(
                         child: TextField(
+                          readOnly: settingLock,
                           style: TextStyle(color: Colors.black, fontSize: 20),
                           controller: usernameController,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.all(4),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: settingLock
+                                  ? Colors.blueGrey[100]
+                                  : Colors.white,
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
@@ -135,18 +190,21 @@ class _ZoomQttState extends State<ZoomQtt> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(width: 50),
+                      SizedBox(width: 20),
                       Text('Password:'),
-                      SizedBox(width: 10),
+                      SizedBox(width: 30),
                       Expanded(
                         child: TextField(
+                          readOnly: settingLock,
                           style: TextStyle(color: Colors.black, fontSize: 20),
                           controller: passwordController,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.all(4),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: settingLock
+                                  ? Colors.blueGrey[100]
+                                  : Colors.white,
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
@@ -170,18 +228,21 @@ class _ZoomQttState extends State<ZoomQtt> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SizedBox(width: 70),
-                      Text('   Topic:'),
-                      SizedBox(width: 10),
+                      SizedBox(width: 20),
+                      Text('Topic:'),
+                      SizedBox(width: 60),
                       Expanded(
                         child: TextField(
+                          readOnly: settingLock,
                           style: TextStyle(color: Colors.black, fontSize: 20),
                           controller: topicController,
                           decoration: InputDecoration(
                               isDense: true,
                               contentPadding: EdgeInsets.all(4),
                               filled: true,
-                              fillColor: Colors.white,
+                              fillColor: settingLock
+                                  ? Colors.blueGrey[100]
+                                  : Colors.white,
                               border: OutlineInputBorder(
                                 borderSide: BorderSide(
                                   color: Colors.blue,
@@ -197,7 +258,12 @@ class _ZoomQttState extends State<ZoomQtt> {
                           },
                         ),
                       ),
-                      SizedBox(width: 60),
+                      SizedBox(width: 5),
+                      Text(
+                        "/zoomqtt",
+                        style: TextStyle(fontSize: 22.0),
+                      ),
+                      SizedBox(width: 100),
                     ],
                   ),
                   SizedBox(height: 20),
@@ -206,12 +272,15 @@ class _ZoomQttState extends State<ZoomQtt> {
                     children: [
                       SizedBox(width: 40),
                       FlatButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          clearDataPrefs();
+                        },
                         child: Text(
                           "Clear form",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: settingLock ? Colors.red : Colors.white),
                         ),
-                        color: Colors.blue,
+                        color: settingLock ? Colors.grey : Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
@@ -234,9 +303,10 @@ class _ZoomQttState extends State<ZoomQtt> {
                         },
                         child: Text(
                           "Save",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: settingLock ? Colors.red : Colors.white),
                         ),
-                        color: Colors.blue,
+                        color: settingLock ? Colors.grey : Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
@@ -251,17 +321,18 @@ class _ZoomQttState extends State<ZoomQtt> {
                                 usernameController.value.text,
                                 passwordController.value.text,
                                 brokerAddressController.value.text,
-                                'testDevice',
-                                topicController.value.text);
+                                topicController.value.text,
+                                "${topicController.value.text}/zoomqtt");
                           } else {
                             print('didnt try to connect');
                           }
                         },
                         child: Text(
                           "Log In",
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyle(
+                              color: settingLock ? Colors.red : Colors.white),
                         ),
-                        color: Colors.blue,
+                        color: settingLock ? Colors.grey : Colors.blue,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                       ),
@@ -269,12 +340,8 @@ class _ZoomQttState extends State<ZoomQtt> {
                     ],
                   ),
                   SizedBox(height: 40),
-                  Text("Footer + link here"),
-                  SizedBox(height: 40),
-                  Text(
-                    '${mqttData.messageReciver != null ? mqttData.messageReciver : ""} Tasks',
-                    style: TextStyle(color: Colors.black, fontSize: 18.0),
-                  ),
+
+                  // SizedBox(height: 40),
                 ],
               ),
             ),
@@ -295,5 +362,13 @@ class _ZoomQttState extends State<ZoomQtt> {
     prefs.setString('prefUsername', enteredUsername);
     prefs.setString('prefPassword', enteredPassword);
     prefs.setString('prefTopic', enteredTopic);
+  }
+
+  clearDataPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('prefBrokerAddress');
+    prefs.remove('prefUsername');
+    prefs.remove('prefPassword');
+    prefs.remove('prefTopic');
   }
 }

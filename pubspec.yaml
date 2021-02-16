@@ -24,7 +24,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  assets:
+    - lib/assets/orengLogo.jpg
   # fonts:
   #   - family: Schyler
   #     fonts:
