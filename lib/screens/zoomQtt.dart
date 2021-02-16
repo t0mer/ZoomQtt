@@ -45,10 +45,28 @@ class _ZoomQttState extends State<ZoomQtt> {
     });
   }
 
+  void loginToMqtt() {
+    if ((brokerAddressController.value.text != "") &&
+        (usernameController.value.text != "") &&
+        (passwordController.value.text != "") &&
+        (topicController.value.text != "")) {
+      Provider.of<MqttService>(context, listen: false).connect(
+          usernameController.value.text,
+          passwordController.value.text,
+          brokerAddressController.value.text,
+          topicController.value.text,
+          "${topicController.value.text}/zoomqtt");
+    } else {
+      print('didnt try to connect');
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    getSharedPrefs();
+    getSharedPrefs().then((value) {
+      loginToMqtt();
+    });
   }
 
   Widget build(BuildContext context) {
