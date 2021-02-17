@@ -292,6 +292,7 @@ class _ZoomQttState extends State<ZoomQtt> {
                       FlatButton(
                         onPressed: () {
                           clearDataPrefs();
+                          getSharedPrefs();
                         },
                         child: Text(
                           "Clear form",
