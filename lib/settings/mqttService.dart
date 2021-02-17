@@ -10,6 +10,7 @@ import 'package:url_launcher/url_launcher.dart';
 class MqttService extends ChangeNotifier {
   String messageReciver;
   bool isNew = false;
+  bool isConnected = false;
   Future<MqttServerClient> connect(String username, String password,
       String brokerUrl, String clientID, String topic) async {
     MqttServerClient client =
@@ -72,11 +73,15 @@ class MqttService extends ChangeNotifier {
   // connection succeeded
   void onConnected() {
     print('Connected');
+    isConnected = true;
+    notifyListeners();
   }
 
 // unconnected
   void onDisconnected() {
     print('Disconnected');
+    isConnected = false;
+    notifyListeners();
   }
 
 // subscribe to topic succeeded

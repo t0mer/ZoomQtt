@@ -16,10 +16,8 @@ class MyApp extends StatelessWidget {
       create: (context) => MqttService(),
       child: MaterialApp(
         title: 'ZoomQtt',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         routes: {
           ZoomQtt.id: (context) => ZoomQtt(title: 'ZoomQtt'),
         },

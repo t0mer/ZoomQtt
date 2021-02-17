@@ -104,13 +104,26 @@ class _ZoomQttState extends State<ZoomQtt> {
                       },
                       child: Text('Go to the Guide')),
                   SizedBox(height: 20),
-                  Row(
+                  InkWell(
+                    child: Container(
+                      padding: const EdgeInsets.all(
+                          20.0), //I used some padding without fixed width and height
+                      decoration: new BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: mqttData.isConnected ? Colors.green : Colors.red,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "UnLock Settings",
+                        !settingLock ? "Settings Unlocked" : "Settings Locked",
                         style: TextStyle(
-                            color: settingLock ? null : Colors.green[900]),
+                            color: settingLock
+                                ? Colors.red[300]
+                                : Colors.green[900]),
                       ),
                       Switch(
                         value: settingLock,
@@ -122,11 +135,6 @@ class _ZoomQttState extends State<ZoomQtt> {
                         activeTrackColor: Colors.redAccent[100],
                         activeColor: Colors.redAccent[100],
                         inactiveTrackColor: Colors.green[900],
-                      ),
-                      Text(
-                        "Lock Settings",
-                        style: TextStyle(
-                            color: settingLock ? Colors.red[300] : null),
                       ),
                     ],
                   ),
